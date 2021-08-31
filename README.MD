@@ -13,4 +13,6 @@ Steps to take:
 
 2: ~~Create test discord~~
 
-3: Write connection bot in python
+3: ~~Create github repo, split off test branch to work on things~~
+
+4: Write connection bot in python
