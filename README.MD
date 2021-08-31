@@ -11,6 +11,6 @@ Steps to take:
     
 1: ~~Create SQL Database~~ 
 
-2: Create test discord
+2: ~~Create test discord~~
 
 3: Write connection bot in python
