@@ -1,10 +1,13 @@
 # Discord bot script
-
-import mysql
+import os
 
 import discord
 
-client = discord.Client()
+
+
+
+
+client = discord.Client('ODgzMDk4NzM4NDMwNzIyMDk4.YTE_yg.S95Zy9rwf1ycp60lgxraYQBbaQk')
 
 
 @client.event
