@@ -16,3 +16,9 @@ Steps to take:
 3: ~~Create github repo, split off test branch to work on things~~
 
 4: Write connection bot in python
+
+    a: ~~create discord bot through discord dev program~~ 
+
+    b: ~~invite it to server and give it permissions to read messages and send messages~~
+
+    c:

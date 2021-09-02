@@ -1,8 +1,13 @@
 # Discord bot script
-
-import mysql
+import os
 
 import discord
+
+from dotenv import load_dotenv
+
+
+load_dotenv()
+TOKEN = os.getenv('DISCORD_TOKEN')
 
 client = discord.Client()
 
@@ -21,4 +26,4 @@ async def on_message(message):
         await message.channel.send('Hello!')
 
 
-client.run('your token here')
+client.run(TOKEN)
