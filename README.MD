@@ -5,25 +5,5 @@ DISCORD MOVIE BOT
     read the movies that are suggested within, and
     then plug those suggestions into a database (sqlite)
     that when the bot is called through a ! command
-<<<<<<< HEAD
-    it will spit out a random movie choice.
-
-Steps to take:
-    
-1: ~~create sqlite db~~ 
-
-2: ~~Create test discord~~
-
-3: ~~Create github repo, split off test branch to work on things~~
-
-4: Write connection bot in python
-
-    a: ~~create discord bot through discord dev program~~ 
-
-    b: ~~invite it to server and give it permissions to read messages and send messages~~
-
-    c:
-=======
     it will spit out a random movie choice. 
     The bot should also check for duplicate movies and not submit them.
->>>>>>> 10b1d4dee3469347bf8884619e59e2330549dcd6
