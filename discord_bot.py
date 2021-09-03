@@ -1,29 +1,44 @@
 # Discord bot script
 import os
-
+from getpass import getpass
+from mysql.connector import connect, Error
+from typing import Text
+from discord.ext import commands
 import discord
-
 from dotenv import load_dotenv
+
 
 
 load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
 
-client = discord.Client()
+
+bot = commands.Bot(command_prefix='!')
+
+@bot.command(name='addmovie', help='adds the movie of your choice to a database of movie choices')
+async def add_movie(ctx, movie):
+
+    try:
+        with connect(
+        host="localhost",
+        user=input("Enter username: "),
+        password=getpass("Enter password: "),
+        database="movies",
+    ) as connection:
+         print(connection)
+    except Error as e:
+        print(e)
+
+    insert_movies_query = """
+    INSERT INTO movies (Name) 
+    VALUES (
+    """  + movie + """ )"""
 
 
-@client.event
-async def on_ready():
-    print('We have logged in as {0.user}'.format(client))
 
 
-@client.event
-async def on_message(message):
-    if message.author == client.user:
-        return
-
-    if message.content.startswith('$hello'):
-        await message.channel.send('Hello!')
+    response = 'You have logged {}'.format(movie)
+    await ctx.send(response)
 
 
-client.run(TOKEN)
+bot.run(TOKEN)

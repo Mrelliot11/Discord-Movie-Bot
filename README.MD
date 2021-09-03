@@ -5,7 +5,8 @@ DISCORD MOVIE BOT
     read the movies that are suggested within, and
     then plug those suggestions into a database (sql)
     that when the bot is called through a ! command
-    it will spit out a random movie choice.
+    it will spit out a random movie choice. 
+    The bot should also check for duplicate movies and not submit them.
 
 Steps to take:
     
