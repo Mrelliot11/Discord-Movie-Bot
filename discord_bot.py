@@ -1,7 +1,5 @@
 # Discord bot script
 import os
-<<<<<<< HEAD
-=======
 from getpass import getpass
 from mysql.connector import connect, Error
 from typing import Text
@@ -14,23 +12,19 @@ import operator
 #connect to sqlite db file
 connection = sqlite3.connect("movies.db")
 cursor = connection.cursor()
->>>>>>> 10b1d4dee3469347bf8884619e59e2330549dcd6
 
 #set rows to object containing all movies from db
 movie_names = cursor.execute("SELECT * FROM MOVIESTABLE").fetchall()
 
-<<<<<<< HEAD
 from dotenv import load_dotenv
 
 
 load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
 
-client = discord.Client()
-=======
+
 print(movie_names)
 # TODO: switch this to the .command function
->>>>>>> 10b1d4dee3469347bf8884619e59e2330549dcd6
 
 load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
@@ -53,9 +47,6 @@ async def add_movie(ctx, movie):
     response = 'You have logged {}'.format(movie)
     await ctx.send(response)
 
-<<<<<<< HEAD
-client.run(TOKEN)
-=======
 @bot.command(name='pickmovie', help='pick a random movie from the list')
 async def pick_movie(ctx):
 
@@ -76,4 +67,3 @@ async def pick_movie(ctx):
 
 
 bot.run(TOKEN)
->>>>>>> 10b1d4dee3469347bf8884619e59e2330549dcd6
