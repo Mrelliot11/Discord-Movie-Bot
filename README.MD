@@ -10,7 +10,7 @@ DISCORD MOVIE BOT
 
 Steps to take:
     
-1: ~~Create SQL Database~~ 
+1: ~~create sqlite db~~ 
 
 2: ~~Create test discord~~
 
