@@ -14,7 +14,7 @@ connection = sqlite3.connect("movies.db")
 cursor = connection.cursor()
 
 #set rows to object containing all movies from db
-movie_names = cursor.execute("SELECT * FROM MOVIESTABLE").fetchall()
+movie_names = cursor.execute("SELECT * FROM movies").fetchall()
 
 print(movie_names)
 # TODO: switch this to the .command function
@@ -29,7 +29,7 @@ bot = commands.Bot(command_prefix='!')
 async def add_movie(ctx, movie):
 
     #create an insert statement to make it easier
-    insert_movies_query = '''INSERT INTO MOVIESTABLE (name) VALUES''' + '(' + "'" + movie + "'" + ')'
+    insert_movies_query = '''INSERT INTO movies (name) VALUES''' + '(' + "'" + movie + "'" + ')'
     #insert the movie data
     cursor.execute(insert_movies_query)
     
@@ -44,13 +44,13 @@ async def add_movie(ctx, movie):
 async def pick_movie(ctx):
 
     #create random choice from table ids
-    random_choice = cursor.execute('SELECT id FROM moviestable ORDER BY RANDOM() LIMIT 1').fetchone()
+    random_choice = cursor.execute('SELECT id FROM movies ORDER BY RANDOM() LIMIT 1').fetchone()
 
     
     
     st = functools.reduce(operator.add, random_choice)
     print(st)
-    movie_choice = cursor.execute('SELECT name FROM moviestable WHERE id = ' + str(st)).fetchone()
+    movie_choice = cursor.execute('SELECT name FROM movies WHERE id = ' + str(st)).fetchone()
     mc = functools.reduce(operator.add, movie_choice)
     print(mc)
     response = 'The movie of the night is {}'.format(mc)
