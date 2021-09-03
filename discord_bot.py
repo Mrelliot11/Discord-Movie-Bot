@@ -22,14 +22,6 @@ from dotenv import load_dotenv
 load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
 
-
-print(movie_names)
-# TODO: switch this to the .command function
-
-load_dotenv()
-TOKEN = os.getenv('DISCORD_TOKEN')
-
-
 bot = commands.Bot(command_prefix='!')
 
 @bot.command(name='addmovie', help='adds the movie of your choice to a database of movie choices')
