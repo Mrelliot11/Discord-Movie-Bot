@@ -7,6 +7,7 @@ import sqlite3
 import functools
 import operator
 import imdb
+from imdb.Movie import Movie
 ia = imdb.IMDb()
 
 # connect to sqlite db file
@@ -40,10 +41,6 @@ async def add_movie(ctx, movie):
                 insert_movie_sql(movie.lower())
                 response = 'You have logged {}'.format(movie)
 
-        else:
-                # if no movies in db, this adds it
-            response = "Movie Added"
-            insert_movie_sql(movie.lower())
     else:
         response = "Please post commands in {} only".format(allowed_channel)
     await ctx.send(response)
@@ -53,7 +50,10 @@ async def add_movie(ctx, movie):
 async def check_movie_list(ctx):
     if ctx.channel.name == allowed_channel:
         rows = cursor.execute('SELECT name FROM movies').fetchall()
-        response = rows
+        if rows:
+            response = rows
+        else:
+            response = "The database is empty, please add movies!"
     else:
         response = "Please post commands in movie-suggestions only."
     await ctx.send(response)
@@ -85,10 +85,16 @@ def insert_movie_sql(movie):
 
 @bot.command(name='pick', help=': This command will pick a random movie from the list')
 async def pick_movie(ctx):
-    if ctx.channel.name == allowed_channel:
-        response = pick_movie()
-    else: 
-        response = "Please post commands in movie-suggestions only."
+
+    rows = cursor.execute('SELECT name FROM movies').fetchall()
+    if rows:
+        if ctx.channel.name == allowed_channel:
+            response = pick_movie()
+
+        else:
+            response = "Please post commands in movie-suggestions only."
+    else:
+            response = "Database is empty, please add movies"
     await ctx.send(response)
 
 
