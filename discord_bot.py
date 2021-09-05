@@ -15,7 +15,7 @@ TOKEN = os.getenv('DISCORD_TOKEN')
 bot = commands.Bot(command_prefix='!')
 
 
-@bot.command(name='addmov', help=': This command adds the movie of your choice to a database of movie choices, if the choice is already there it will not add it.')
+@bot.command(name='addmovie', help=': This command adds the movie of your choice to a database of movie choices, if the choice is already there it will not add it.')
 async def add_movie(ctx, movie):
     # grab names from db as list
     rows = cursor.execute('SELECT name FROM movies').fetchall()
@@ -59,7 +59,7 @@ def insert_movie(movie):
     connection.commit()
 
 
-@bot.command(name='pickone', help=': This command will pick a random movie from the list')
+@bot.command(name='pick', help=': This command will pick a random movie from the list')
 async def pick_movie(ctx):
     response = pick_movie()
     await ctx.send(response)
