@@ -2,6 +2,7 @@ DISCORD MOVIE BOT
 
 This is a discord movie bot that can run commands for a movie night. The bot is run on python with data storage using sqlite, and stores movie choices to be picked at random from a discord channel. 
 
+You will need to keep a local .db file named movies in the repository folder for this to work, it must have a table named 'name' and one named 'id', with id being auto incremented.
 
 Make sure to use dashes for the movie name if there are multiple words.
 
