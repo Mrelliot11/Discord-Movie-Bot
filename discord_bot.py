@@ -27,26 +27,28 @@ bot = commands.Bot(command_prefix='!')
 @bot.command(name='addmovie', help='adds the movie of your choice to a database of movie choices')
 async def add_movie(ctx, movie):
 
-    #create an insert statement to make it easier
-    insert_movies_query = '''INSERT INTO movies (name) VALUES''' + '(' + "'" + movie + "'" + ')'
-    #insert the movie data
-    cursor.execute(insert_movies_query)
-    
-    #this is required after changes are made to commit them to db
-    connection.commit()
+
+
+    insert_movie(movie)
 
     #show response on discord end
     response = 'You have logged {}'.format(movie)
     await ctx.send(response)
+
+def insert_movie(movie):
+    #create an insert statement to make it easier
+        insert_movies_query = '''INSERT INTO movies (name) VALUES''' + '(' + "'" + movie + "'" + ')'
+    #insert the movie data
+        cursor.execute(insert_movies_query)
+    
+    #this is required after changes are made to commit them to db
+        connection.commit()
 
 @bot.command(name='pickmovie', help='pick a random movie from the list')
 async def pick_movie(ctx):
 
     #create random choice from table ids
     random_choice = cursor.execute('SELECT id FROM movies ORDER BY RANDOM() LIMIT 1').fetchone()
-
-    
-    
     st = functools.reduce(operator.add, random_choice)
     print(st)
     movie_choice = cursor.execute('SELECT name FROM movies WHERE id = ' + str(st)).fetchone()
