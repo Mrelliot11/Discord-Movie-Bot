@@ -27,14 +27,23 @@ bot = commands.Bot(command_prefix='!')
 @bot.command(name='addmovie', help='adds the movie of your choice to a database of movie choices')
 async def add_movie(ctx, movie):
 
-
-
-    insert_movie(movie)
-
-    #show response on discord end
-    response = 'You have logged {}'.format(movie)
+    rows = cursor.execute('SELECT name FROM movies').fetchall()
+    rw = functools.reduce(operator.add, rows)
+    print(movie)
+    print(rw)
+    
+    if (movie in rw):
+            # TODO: turn tuple into name string, check name for dupes
+           response = "That movie is already in the database, try again" 
+    else: 
+            insert_movie(movie)
+            response = 'You have logged {}'.format(movie)
+           
     await ctx.send(response)
 
+        
+            
+    
 def insert_movie(movie):
     #create an insert statement to make it easier
         insert_movies_query = '''INSERT INTO movies (name) VALUES''' + '(' + "'" + movie + "'" + ')'
