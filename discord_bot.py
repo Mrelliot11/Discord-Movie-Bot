@@ -1,5 +1,6 @@
 # Discord bot script
 import os
+from discord import client
 from discord.ext import commands
 from discord.ext.commands.help import HelpCommand
 from dotenv import load_dotenv
@@ -15,47 +16,61 @@ load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
 
 help_command = commands.DefaultHelpCommand(
-    no_category = 'Commands'
+    no_category='Commands'
 )
-bot = commands.Bot(command_prefix='!', description='A movie bot to help you make the hard decisions :)', help_command=help_command)
+bot = commands.Bot(command_prefix='!',
+                   description='A movie bot to help you make the hard decisions :)', help_command=help_command)
 
 
-
-@bot.command(name='addmovie <movie>', help=': This command adds the movie of your choice to a database of movie choices, if the choice is already there it will not add it.')
+@bot.command(name='addmovie', help=': This command adds the movie of your choice to a database of movie choices, if the choice is already there it will not add it.')
 async def add_movie(ctx, movie):
-    # grab names from db as list
-    rows = cursor.execute('SELECT name FROM movies').fetchall()
-    if rows:
-        # if db has data
-        rw = functools.reduce(operator.add, rows)
-        if (movie.lower() in rw):
-            response = "That movie is already in the database, try again"
+
+    if ctx.channel.name == 'movie-suggestions':
+        # grab names from db as list
+        rows = cursor.execute('SELECT name FROM movies').fetchall()
+        if rows:
+            # if db has data
+            rw = functools.reduce(operator.add, rows)
+            if (movie.lower() in rw):
+                response = "That movie is already in the database, try again"
+            else:
+                insert_movie_sql(movie.lower())
+                response = 'You have logged {}'.format(movie)
+
         else:
-            insert_movie(movie.lower())
-            response = 'You have logged {}'.format(movie)
-
+                # if no movies in db, this adds it
+            response = "Movie Added"
+            insert_movie_sql(movie.lower())
     else:
-        # if no movies in db, this adds it
-        response = "Movie Added"
-        insert_movie(movie.lower())
-
+        response = "Please post in movie suggestions only"
     await ctx.send(response)
 
 
 @bot.command(name='movies', help=': This command will show the current choices for movies')
 async def check_movie_list(ctx):
-    rows = cursor.execute('SELECT name FROM movies').fetchall()
-    await ctx.send(rows)
+    if ctx.channel.name == 'movie-suggestions':
+        rows = cursor.execute('SELECT name FROM movies').fetchall()
+        response = rows
+    else:
+        response = "Please post commands in movie-suggestions only."
+    await ctx.send(response)
 
 
 @bot.command(name='eraseall', help=': Only use this if you really need to erase everything')
 async def erase_movies(ctx):
-    cursor.execute('DELETE FROM movies WHERE id > 0')
-    connection.commit()
-    await ctx.send("Database erased.")
+      if ctx.channel.name == 'movie-suggestions':
+        cursor.execute('DELETE FROM movies WHERE id > 0')
+        connection.commit()
+        response = "Database Erased."    
+      else:
+        response = "Please post commands in movie-suggestions only"
+
+      await ctx.send(response)
 
 
-def insert_movie(movie):
+def insert_movie_sql(movie):
+    
+    
     # create an insert statement to make it easier
     insert_movies_query = '''INSERT INTO movies (name) VALUES''' + \
         '(' + "'" + movie + "'" + ')'
@@ -67,7 +82,10 @@ def insert_movie(movie):
 
 @bot.command(name='pick', help=': This command will pick a random movie from the list')
 async def pick_movie(ctx):
-    response = pick_movie()
+    if ctx.channel.name == 'movie-suggestions':
+        response = pick_movie()
+    else: 
+        response = "Please post commands in movie-suggestions only."
     await ctx.send(response)
 
 
