@@ -28,7 +28,7 @@ async def add_movie(ctx, movie):
             response = 'You have logged {}'.format(movie)
     await ctx.send(response)
 
-        
+# TODO: change all user inputs and database reads to uppercase to fix spelling differences on ^^^^
             
     
 def insert_movie(movie):
