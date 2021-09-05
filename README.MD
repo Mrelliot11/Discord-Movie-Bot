@@ -14,3 +14,9 @@ COMMANDS:
 !movies: shows all the movies put into the db so far
 
 !eraseall: deletes all the movies in the .db file
+
+
+
+TODO:
+
+add catagories and !pickcatagory feature
