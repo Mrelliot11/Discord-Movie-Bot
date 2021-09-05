@@ -1,6 +1,5 @@
 # Discord bot script
 import os
-from discord import client
 from discord.ext import commands
 from discord.ext.commands.help import HelpCommand
 from dotenv import load_dotenv
@@ -104,11 +103,8 @@ def pick_movie():
 
     
     imdb_movie = ia.search_movie(mc)
-    print(imdb_movie)
     imdb_movie_id = ia.get_movie(imdb_movie[0].getID())
-    print(imdb_movie_id)
     movie_url = ia.get_imdbURL(imdb_movie_id)
-    print(movie_url)
     response = 'The movie of the night is {}'.format(movie_url)
     return response
 
