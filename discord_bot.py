@@ -20,15 +20,13 @@ bot = commands.Bot(command_prefix='!')
 async def add_movie(ctx, movie):
     rows = cursor.execute('SELECT name FROM movies').fetchall()
     rw = functools.reduce(operator.add, rows)
-    if (movie in rw):
-            # TODO: turn tuple into name string, check name for dupes
+    if (movie.lower() in rw):
            response = "That movie is already in the database, try again" 
     else: 
-            insert_movie(movie)
+            insert_movie(movie.lower())
             response = 'You have logged {}'.format(movie)
     await ctx.send(response)
 
-# TODO: change all user inputs and database reads to uppercase to fix spelling differences on ^^^^
             
     
 def insert_movie(movie):
