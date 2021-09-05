@@ -80,18 +80,6 @@ async def erase_movies(ctx):
 
     await ctx.send(response)
 
-
-def insert_movie_sql(movie):
-
-    # create an insert statement to make it easier
-    insert_movies_query = '''INSERT INTO movies (name) VALUES''' + \
-        '(' + "'" + movie + "'" + ')'
-    # insert the movie data
-    cursor.execute(insert_movies_query)
-    # this is required after changes are made to commit them to db
-    connection.commit()
-
-
 @bot.command(name='pick',
              help=': This command will pick a random movie from the list')
 async def pick_movie(ctx):
@@ -122,6 +110,16 @@ def pick_movie():
     movie_url = ia.get_imdbURL(imdb_movie_id)
     response = 'The movie of the night is {}'.format(movie_url)
     return response
+
+def insert_movie_sql(movie):
+
+    # create an insert statement to make it easier
+    insert_movies_query = '''INSERT INTO movies (name) VALUES''' + \
+        '(' + "'" + movie + "'" + ')'
+    # insert the movie data
+    cursor.execute(insert_movies_query)
+    # this is required after changes are made to commit them to db
+    connection.commit()
 
 
 bot.run(TOKEN)
