@@ -7,6 +7,8 @@ from dotenv import load_dotenv
 import sqlite3
 import functools
 import operator
+import imdb
+ia = imdb.IMDb()
 
 # connect to sqlite db file
 connection = sqlite3.connect("movies.db")
@@ -99,7 +101,15 @@ def pick_movie():
     movie_choice = cursor.execute(
         'SELECT name FROM movies WHERE id = ' + str(st)).fetchone()
     mc = functools.reduce(operator.add, movie_choice)
-    response = 'The movie of the night is {}'.format(mc)
+
+    
+    imdb_movie = ia.search_movie(mc)
+    print(imdb_movie)
+    imdb_movie_id = ia.get_movie(imdb_movie[0].getID())
+    print(imdb_movie_id)
+    movie_url = ia.get_imdbURL(imdb_movie_id)
+    print(movie_url)
+    response = 'The movie of the night is {}'.format(movie_url)
     return response
 
 
