@@ -47,16 +47,20 @@ def insert_movie(movie):
 @bot.command(name='pickmovie', help='pick a random movie from the list')
 async def pick_movie(ctx):
 
-    #create random choice from table ids
-    random_choice = cursor.execute('SELECT id FROM movies ORDER BY RANDOM() LIMIT 1').fetchone()
-    st = functools.reduce(operator.add, random_choice)
-    print(st)
-    movie_choice = cursor.execute('SELECT name FROM movies WHERE id = ' + str(st)).fetchone()
-    mc = functools.reduce(operator.add, movie_choice)
-    print(mc)
-    response = 'The movie of the night is {}'.format(mc)
+    response = pick_movie()
     
     await ctx.send(response)
+
+def pick_movie():
+    #create random choice from table ids
+        random_choice = cursor.execute('SELECT id FROM movies ORDER BY RANDOM() LIMIT 1').fetchone()
+        st = functools.reduce(operator.add, random_choice)
+        print(st)
+        movie_choice = cursor.execute('SELECT name FROM movies WHERE id = ' + str(st)).fetchone()
+        mc = functools.reduce(operator.add, movie_choice)
+        print(mc)
+        response = 'The movie of the night is {}'.format(mc)
+        return response
 
 
 
