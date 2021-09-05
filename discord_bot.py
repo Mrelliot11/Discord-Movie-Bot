@@ -1,6 +1,7 @@
 # Discord bot script
 import os
 from discord.ext import commands
+from discord.ext.commands.help import HelpCommand
 from dotenv import load_dotenv
 import sqlite3
 import functools
@@ -12,10 +13,15 @@ cursor = connection.cursor()
 
 load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
-bot = commands.Bot(command_prefix='!')
+
+help_command = commands.DefaultHelpCommand(
+    no_category = 'Commands'
+)
+bot = commands.Bot(command_prefix='!', description='A movie bot to help you make the hard decisions :)', help_command=help_command)
 
 
-@bot.command(name='addmovie', help=': This command adds the movie of your choice to a database of movie choices, if the choice is already there it will not add it.')
+
+@bot.command(name='addmovie <movie>', help=': This command adds the movie of your choice to a database of movie choices, if the choice is already there it will not add it.')
 async def add_movie(ctx, movie):
     # grab names from db as list
     rows = cursor.execute('SELECT name FROM movies').fetchall()
