@@ -24,7 +24,6 @@ help_command = commands.DefaultHelpCommand(
 bot = commands.Bot(command_prefix='!',
                    description='A movie bot to help you make the hard decisions :)', help_command=help_command)
 
-
 @bot.command(name='addmovie', help=': This command adds the movie of your choice to a database of movie choices, if the choice is already there it will not add it.')
 async def add_movie(ctx, movie):
 
@@ -41,6 +40,10 @@ async def add_movie(ctx, movie):
                 insert_movie_sql(movie.lower())
                 response = 'You have logged {}'.format(movie)
 
+        else:
+                # if no movies in db, this adds it
+            response = "Movie Added"
+            insert_movie_sql(movie.lower())
     else:
         response = "Please post commands in {} only".format(allowed_channel)
     await ctx.send(response)
