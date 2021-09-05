@@ -7,8 +7,6 @@ from dotenv import load_dotenv
 import sqlite3
 import functools
 import operator
-import imdb
-ia = imdb.IMDb()
 
 # connect to sqlite db file
 connection = sqlite3.connect("movies.db")
