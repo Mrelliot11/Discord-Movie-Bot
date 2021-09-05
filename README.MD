@@ -20,3 +20,5 @@ COMMANDS:
 TODO:
 
 add catagories and !pickcatagory feature
+pull data from imdb using imdbpy to support catagories and runtimes
+

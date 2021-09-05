@@ -15,6 +15,7 @@ cursor = connection.cursor()
 load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
 
+allowed_channel = 'movie-suggestions'
 help_command = commands.DefaultHelpCommand(
     no_category='Commands'
 )
@@ -25,7 +26,8 @@ bot = commands.Bot(command_prefix='!',
 @bot.command(name='addmovie', help=': This command adds the movie of your choice to a database of movie choices, if the choice is already there it will not add it.')
 async def add_movie(ctx, movie):
 
-    if ctx.channel.name == 'movie-suggestions':
+    
+    if ctx.channel.name == allowed_channel:
         # grab names from db as list
         rows = cursor.execute('SELECT name FROM movies').fetchall()
         if rows:
@@ -42,13 +44,13 @@ async def add_movie(ctx, movie):
             response = "Movie Added"
             insert_movie_sql(movie.lower())
     else:
-        response = "Please post in movie suggestions only"
+        response = "Please post commands in {} only".format(allowed_channel)
     await ctx.send(response)
 
 
 @bot.command(name='movies', help=': This command will show the current choices for movies')
 async def check_movie_list(ctx):
-    if ctx.channel.name == 'movie-suggestions':
+    if ctx.channel.name == allowed_channel:
         rows = cursor.execute('SELECT name FROM movies').fetchall()
         response = rows
     else:
@@ -58,12 +60,12 @@ async def check_movie_list(ctx):
 
 @bot.command(name='eraseall', help=': Only use this if you really need to erase everything')
 async def erase_movies(ctx):
-      if ctx.channel.name == 'movie-suggestions':
+      if ctx.channel.name == allowed_channel:
         cursor.execute('DELETE FROM movies WHERE id > 0')
         connection.commit()
         response = "Database Erased."    
       else:
-        response = "Please post commands in movie-suggestions only"
+        response = "Please post commands in {} only".format(allowed_channel)
 
       await ctx.send(response)
 
@@ -82,7 +84,7 @@ def insert_movie_sql(movie):
 
 @bot.command(name='pick', help=': This command will pick a random movie from the list')
 async def pick_movie(ctx):
-    if ctx.channel.name == 'movie-suggestions':
+    if ctx.channel.name == allowed_channel:
         response = pick_movie()
     else: 
         response = "Please post commands in movie-suggestions only."
