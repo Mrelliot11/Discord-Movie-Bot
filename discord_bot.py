@@ -14,17 +14,17 @@ print("Starting Movie Bot...")
 # call imdb py and set
 ia = Cinemagoer()
 
-# connect to sqlite db file
-connection = sqlite3.connect("movies.db")
-
 #check if connection exists
 try:
-    connection
+    # connect to sqlite db file
+    connection = sqlite3.connect("movies.db")
     print("Connection to database successful")
+    #set cursor
+    cursor = connection.cursor()
+    cursor.execute("""CREATE TABLE IF NOT EXISTS movies (name TEXT, id INTEGER PRIMARY KEY)""")
+
 except NameError:
     print("No connection to db")
-#set cursor
-cursor = connection.cursor()
 
 # load .env file
 load_dotenv()
