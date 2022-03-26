@@ -2,18 +2,23 @@ DISCORD MOVIE BOT
 
 # Description
 
-This is a discord movie bot that can run commands for a movie night. The bot is run on python with data storage using sqlite, and stores movie choices to be picked at random from a discord channel. 
+This is a discord movie bot that can run commands for a movie night. The bot is run on python with data storage using sqlite, and stores movie choices to be picked at random from a discord channel. This bot also connects to IMDB and accesses movie data to post imdb links in discord.
 
 # Requirements
 ## Windows:
 
+Python 3+
+
 Requires [Fuzzywuzzy](https://pypi.org/project/fuzzywuzzy/), [imdbPy](https://cinemagoer.github.io/), and [DiscordPy](https://discordpy.readthedocs.io/en/stable/intro.html#installing)
 
-`pip install fuzzywuzzy`
 
-`pip install cinemagoer`
+## Quickstart:
 
-`py -3 -m pip install -U discord.py`
+    pip install fuzzywuzzy
+
+    pip install cinemagoer
+
+    py -3 -m pip install -U discord.py
 
 # COMMANDS
 
