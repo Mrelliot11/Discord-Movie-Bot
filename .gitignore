@@ -22,7 +22,7 @@ prof
 .hgignore
 .hgtags
 .travis.yml
-.gitignore
+*.db*
 .txts
 /imdb/
 /bin/
