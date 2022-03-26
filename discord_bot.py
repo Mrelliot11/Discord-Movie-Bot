@@ -7,7 +7,6 @@ import sqlite3
 import functools
 import operator
 from imdb import Cinemagoer
-from cinemagoer import *
 
 print("Starting Movie Bot...")
 

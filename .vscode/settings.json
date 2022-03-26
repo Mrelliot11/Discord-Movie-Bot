@@ -1,4 +1,7 @@
 {
     "python.formatting.provider": "yapf",
-    "python.pythonPath": "C:\\Users\\Admin2\\AppData\\Local\\Microsoft\\WindowsApps\\python3.9.exe"
+    "python.pythonPath": "C:\\Users\\Admin2\\AppData\\Local\\Microsoft\\WindowsApps\\python3.9.exe",
+    "python.analysis.extraPaths": [
+        "./cinemagoer"
+    ]
 }
