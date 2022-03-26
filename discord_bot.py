@@ -1,11 +1,11 @@
 # Discord bot script
-from multiprocessing.connection import wait
 import os
 from discord.ext import commands
 from dotenv import load_dotenv
 import sqlite3
 import functools
 import operator
+from fuzzywuzzy import fuzz
 from imdb import Cinemagoer
 
 print("Starting Movie Bot...")
@@ -17,13 +17,14 @@ ia = Cinemagoer()
 connection = sqlite3.connect("movies.db")
 
 #check if connection exists
-if (connection):
+try:
+    connection
     print("Connection to database successful")
+except NameError:
+    print("No connection to db")
 #set cursor
 cursor = connection.cursor()
 
-if (cursor):
-    print("Cursor created")
 # load .env file
 load_dotenv()
 # assign token to variable
@@ -38,7 +39,6 @@ bot = commands.Bot(
     description='A movie bot to help you make the hard decisions :)',
     help_command=help_command)
 
-
 @bot.command(
     name='addmovie',
     aliases = ['add', 'addmov'],
@@ -46,7 +46,9 @@ bot = commands.Bot(
     ': This command adds the movie of your choice to a database of movie choices, if the choice is already there it '
     'will not add it. '
 )
-async def add_movie(ctx, movie=""):
+async def add_movie(ctx, *args):
+    
+    movie = ' '.join(args)
     #check if movie exists
     if (movie != "") and (movie != None):
          # check if correct channel
@@ -75,17 +77,21 @@ async def add_movie(ctx, movie=""):
         response = "Please enter a movie name"
     await ctx.send(response)
     
+@bot.command(name='search', alises= ['searchmov', 'searchmovie', 'check', 'find'], help= ': This command searches for a movie of your choice in the database, if the movie is not in the database it will not search for it.')
+async def search_movie(ctx, *args):
     
-@bot.command(name='search', alises= ['searchmov', 'searchmovie'], help= ': This command searches for a movie of your choice in the database, if the movie is not in the database it will not search for it.')
-async def search_movie(ctx, movie=""):
+    movie = ' '.join(args)
     if ctx.channel.name == allowed_channel:
         rows = cursor.execute('SELECT name FROM movies').fetchall()
         if rows:
             rw = functools.reduce(operator.add, rows)
-            if movie.lower() in rw:
-                response = "That movie is in the database."
+            #use fuzzywuzzy to find the closest match in rw
+            for i in rw:
+                if fuzz.ratio(i, movie.lower()) > 70:
+                    response = "The movie you searched for, {}, is in the list".format(i)
+                    break
             else:
-                response = "That movie is not in the database."
+                response = "That movie is not in the database, try again"
                 
         else:
             response = "There are no movies in the database."
@@ -139,7 +145,9 @@ async def pick_movie(ctx):
     
 @bot.command(name='delete',
              help=': This command will delete a movie from the list')
-async def delete_movie(ctx, movie):
+async def delete_movie(ctx, *args):
+    
+    movie = ' '.join(args)
     if ctx.channel.name == allowed_channel:
         rows = cursor.execute('SELECT name FROM movies').fetchall()
         print(rows)
@@ -157,7 +165,6 @@ async def delete_movie(ctx, movie):
         response = "Please post commands in movie-suggestions only."
     await ctx.send(response)
 
-
 def pick_movie_from_sql():
     # create random choice from table ids
     random_choice = cursor.execute(
@@ -168,7 +175,6 @@ def pick_movie_from_sql():
     movie_choice = cursor.execute('SELECT name FROM movies WHERE id = ' +
                                   str(st)).fetchone()
     mc = functools.reduce(operator.add, movie_choice)
-    print(mc)
     # get movie name and reduce to string, then pass through imdb id search
     imdb_movie = ia.search_movie(mc)[0]
     # get movie url
@@ -178,12 +184,8 @@ def pick_movie_from_sql():
     return response
 
 def delete_movie_sql(movie): 
-    delete_movies_query = 'DELETE FROM movies WHERE name = ' + "'" + movie + "'"
-    
-    cursor.execute(delete_movies_query)
-    
+    cursor.execute('DELETE FROM movies WHERE name = ?', (movie,))
     connection.commit()
-
 
 def insert_movie_sql(movie):
     # create an insert statement to make it easier
