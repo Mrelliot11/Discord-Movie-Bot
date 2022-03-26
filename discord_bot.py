@@ -169,13 +169,13 @@ def pick_movie_from_sql():
                                   str(st)).fetchone()
     mc = functools.reduce(operator.add, movie_choice)
     # get movie name and reduce to string, then pass through imdb id search
-    #imdb_movie = ia.search_movie(mc)
+    imdb_movie = ia.search_movie(mc)
     # grab imdb movie id from movie title
-    #imdb_movie_id = ia.get_movie(imdb_movie[0].getID())
+    imdb_movie_id = ia.get_movie(imdb_movie[0].getID())
     # get movie url
-    #movie_url = ia.get_imdbURL(imdb_movie_id) // TODO: gotta fix later
+    movie_url = ia.get_imdbURL(imdb_movie_id) 
 
-    response = 'The movie of the night is {}'.format(mc)
+    response = 'The movie of the night is {}'.format(movie_url)
     return response
 
 def delete_movie_sql(movie): 
