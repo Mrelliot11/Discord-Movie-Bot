@@ -10,7 +10,8 @@ import imdb
 import time
 
 print("Starting Movie Bot...")
-time.sleep(1)
+
+
 
 
 # call imdb py and set
@@ -108,6 +109,23 @@ async def pick_movie(ctx):
     else:
         response = "Database is empty, please add movies"
     await ctx.send(response)
+    
+@bot.command(name='delete',
+             help=': This command will delete a movie from the list')
+async def delete_movie(ctx, movie):
+    if ctx.channel.name == allowed_channel:
+        rows = cursor.execute('SELECT name FROM movies').fetchall()
+        if rows:
+            if movie.lower() in rows:
+                delete_movie_sql(movie.lower())
+                response = '{} has been deleted from the list'.format(movie)
+            else:
+                response = 'That movie is not in the list'
+        else:
+            response = "The database is empty, please add movies!"
+    else:
+        response = "Please post commands in movie-suggestions only."
+    await ctx.send(response)
 
 
 def pick_movie_from_sql():
@@ -129,6 +147,13 @@ def pick_movie_from_sql():
 
     response = 'The movie of the night is {}'.format(movie_url)
     return response
+
+def delete_movie_sql(movie): 
+    delete_movies_query = 'DELETE FROM movies WHERE name = ' + "'" + movie + "'";
+    
+    cursor.execute(delete_movies_query)
+    
+    connection.commit()
 
 
 def insert_movie_sql(movie):
