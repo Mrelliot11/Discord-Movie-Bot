@@ -1,11 +1,12 @@
 # Discord bot script
+from concurrent.futures import process
 import os
 from discord.ext import commands
 from dotenv import load_dotenv
 import sqlite3
 import functools
 import operator
-from fuzzywuzzy import fuzz
+from fuzzywuzzy import process
 from imdb import Cinemagoer
 
 print("Starting Movie Bot...")
@@ -39,12 +40,17 @@ bot = commands.Bot(
     description='A movie bot to help you make the hard decisions :)',
     help_command=help_command)
 
+@bot.event
+async def on_command_error(ctx, error):
+    if isinstance(error, commands.CommandNotFound):
+        await ctx.send("{}".format(ctx.message.author.mention) + " I don't know that command. Try !help")
+
 @bot.command(
     name='addmovie',
     aliases = ['add', 'addmov'],
     help=
     ': This command adds the movie of your choice to a database of movie choices, if the choice is already there it '
-    'will not add it. '
+    'will not add it. E.G. !addmovie The Matrix'
 )
 async def add_movie(ctx, *args):
     
@@ -77,7 +83,7 @@ async def add_movie(ctx, *args):
         response = "Please enter a movie name"
     await ctx.send(response)
     
-@bot.command(name='search', alises= ['searchmov', 'searchmovie', 'check', 'find'], help= ': This command searches for a movie of your choice in the database, if the movie is not in the database it will not search for it.')
+@bot.command(name='search', alises= ['searchmov', 'searchmovie', 'check', 'find'], help= ': This command searches for a movie of your choice in the database, if the movie is not in the database it will not search for it. e.g. !search The Matrix')
 async def search_movie(ctx, *args):
     
     movie = ' '.join(args)
@@ -86,13 +92,16 @@ async def search_movie(ctx, *args):
         if rows:
             rw = functools.reduce(operator.add, rows)
             #use fuzzywuzzy to find the closest match in rw
-            for i in rw:
-                if fuzz.ratio(i, movie.lower()) > 70:
-                    response = "The movie you searched for, {}, is in the list".format(i)
-                    break
-            else:
-                response = "That movie is not in the database, try again"
-                
+            choices = rw
+            #grab tuple of best choice from rw
+            score = process.extractOne(movie, choices)
+            #get score from tuple   (score, choice)
+            scoreNumber = score[1]
+            #if score is greater than 90%, we assume it is a match
+            if scoreNumber > 90:
+                response = '{} is in the database'.format(movie)
+            else: #if not, we assume it is not in the db
+                response = '{} is not in the database'.format(movie)    
         else:
             response = "There are no movies in the database."
     else:
@@ -144,7 +153,7 @@ async def pick_movie(ctx):
     await ctx.send(response)
     
 @bot.command(name='delete',
-             help=': This command will delete a movie from the list')
+             help=': This command will delete a movie from the list e.g !delete The Matrix')
 async def delete_movie(ctx, *args):
     
     movie = ' '.join(args)
