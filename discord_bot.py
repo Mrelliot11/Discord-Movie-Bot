@@ -168,13 +168,12 @@ def pick_movie_from_sql():
     movie_choice = cursor.execute('SELECT name FROM movies WHERE id = ' +
                                   str(st)).fetchone()
     mc = functools.reduce(operator.add, movie_choice)
+    print(mc)
     # get movie name and reduce to string, then pass through imdb id search
-    imdb_movie = ia.search_movie(mc)
-    # grab imdb movie id from movie title
-    imdb_movie_id = ia.get_movie(imdb_movie[0].getID())
+    imdb_movie = ia.search_movie(mc)[0]
     # get movie url
-    movie_url = ia.get_imdbURL(imdb_movie_id) 
-
+    movie_url = ia.get_imdbURL(imdb_movie)
+    # print movie url
     response = 'The movie of the night is {}'.format(movie_url)
     return response
 
