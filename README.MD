@@ -1,25 +1,30 @@
 DISCORD MOVIE BOT
 
+# Description
+
 This is a discord movie bot that can run commands for a movie night. The bot is run on python with data storage using sqlite, and stores movie choices to be picked at random from a discord channel. 
 
-You will need to keep a local .db file named movies in the repository folder for this to work, it must have a table named 'movies' with one column called 'name' (text) and one named 'id' (int), with id being auto incremented.
+# Requirements
+## Windows:
 
-Make sure to use dashes for the movie name if there are multiple words.
+Requires [Fuzzywuzzy](https://pypi.org/project/fuzzywuzzy/), [imdbPy](https://cinemagoer.github.io/), and [DiscordPy](https://discordpy.readthedocs.io/en/stable/intro.html#installing)
 
-COMMANDS:
+`pip install fuzzywuzzy`
 
-!addmovie 'movie-name': adds your movie choice to the database, if the movie is already present you will be asked to add a different movie.
+`pip install cinemagoer`
 
-!pick: chooses a movie at random
+`py -3 -m pip install -U discord.py`
 
-!movies: shows all the movies put into the db so far
+# COMMANDS
 
-!eraseall: deletes all the movies in the .db file
+- !addmovie: adds your movie choice to the database if not already present.
 
+- !pick: chooses a movie at random and gives IMDB listing
 
+- !movies: shows all the movies put into the db so far
 
-TODO:
+- !eraseall: deletes all the movies in the .db file
 
-add catagories and !pickcatagory feature
-pull data from imdb using imdbpy to support catagories and runtimes
+- !search: searches the list of entered movies for the entered movie
 
+- !delete: deletes the entered movie
