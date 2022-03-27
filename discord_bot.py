@@ -37,7 +37,7 @@ allowed_channel = ['movie-suggestions', 'movie-night-suggestions']
 help_command = commands.DefaultHelpCommand(no_category='Commands')
 # initialize bot object
 bot = commands.Bot(
-    command_prefix='!',
+    command_prefix='$',
     description='A movie bot to help you make the hard decisions :)',
     help_command=help_command)
 
