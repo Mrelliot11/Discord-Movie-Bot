@@ -22,7 +22,7 @@ try:
     #set cursor
     cursor = connection.cursor()
     cursor.execute("""CREATE TABLE IF NOT EXISTS movies (name TEXT, id INTEGER PRIMARY KEY)""")
-
+# if connection fails
 except NameError:
     print("No connection to db")
 
@@ -80,7 +80,7 @@ async def add_movie(ctx, *args):
         else:
             response = "Please post commands in {} only".format(allowed_channel)
     else: 
-        response = "Please enter a movie name"
+        response = "Please enter a movie name e.g. !addmovie The Matrix"
     await ctx.send(response)
     
 @bot.command(name='search', alises= ['searchmov', 'searchmovie', 'check', 'find'], help= ': This command searches for a movie of your choice in the database, if the movie is not in the database it will not search for it. e.g. !search The Matrix')
@@ -157,21 +157,22 @@ async def pick_movie(ctx):
 async def delete_movie(ctx, *args):
     
     movie = ' '.join(args)
-    if ctx.channel.name in allowed_channel:
-        rows = cursor.execute('SELECT name FROM movies').fetchall()
-        print(rows)
-        if rows:
-            rw = functools.reduce(operator.add, rows)
-            if movie.lower() in rw:
-                delete_movie_sql(movie.lower())
-                response = '{} has been deleted from the list'.format(movie)
+    if movie != "":
+        if ctx.channel.name in allowed_channel:
+            rows = cursor.execute('SELECT name FROM movies').fetchall()
+            if rows:
+                rw = functools.reduce(operator.add, rows)
+                if movie.lower() in rw:
+                    delete_movie_sql(movie.lower())
+                    response = '{} has been deleted from the list'.format(movie)
+                else:
+                    response = 'That movie is not in the list'
             else:
-                print(movie)
-                response = 'That movie is not in the list'
+                response = "The database is empty, please add movies!"
         else:
-            response = "The database is empty, please add movies!"
+            response = "Please post commands in movie-suggestions only."
     else:
-        response = "Please post commands in movie-suggestions only."
+        response = "Please enter a movie name e.g !delete The Matrix"
     await ctx.send(response)
 
 def pick_movie_from_sql():
