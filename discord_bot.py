@@ -111,7 +111,7 @@ async def search_movie(ctx, *args):
             if scoreNumber > 90:
                 response = '{} is in the database'.format(movie.lower())
             else: #if not, we assume it is not in the db
-                response = '{} is not in the database'.format(movie.lower)    
+                response = '{} is not in the database'.format(movie.lower())    
         else:
             response = "There are no movies in the database."
     else:
