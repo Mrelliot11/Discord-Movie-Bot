@@ -14,7 +14,6 @@ Requires [Fuzzywuzzy](https://pypi.org/project/fuzzywuzzy/), [imdbPy](https://ci
 A .env file containing discord bot credentials will also need to be used with format: 
         
     DISCORD_TOKEN='DiscordTokenGoesHere'
-    DISCORD_GUILD="ServerNameGoesHere"
 
 Discord Tokens can be acquired from the [Developer Portal](https://discord.com/developers)
 
