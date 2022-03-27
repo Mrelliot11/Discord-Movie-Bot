@@ -54,7 +54,7 @@ async def on_command_error(ctx, error):
         elif isinstance(error, commands.CommandOnCooldown):
             await ctx.send('This command is on cooldown')
         else:
-            await ctx.send('An error has occured')
+            await ctx.send('An error has occured' + str(error))
 @bot.command(
     name='addmovie',
     aliases = ['add', 'addmov'],
@@ -123,9 +123,12 @@ async def search_movie(ctx, *args):
              help=': This command will show the current choices for movies')
 async def check_movie_list(ctx):
     if ctx.channel.name in allowed_channel:
+        response = 'The current movies are: '
         rows = cursor.execute('SELECT name FROM movies').fetchall()
         if rows:
-            response = rows
+            for movie in rows:
+                if movie != "":
+                    response = response + '\n' + movie[0]
         else:
             response = "The database is empty, please add movies!"
     else:
