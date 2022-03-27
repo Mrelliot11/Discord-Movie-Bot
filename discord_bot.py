@@ -2,6 +2,7 @@
 from concurrent.futures import process
 import os
 from discord.ext import commands
+import discord
 from dotenv import load_dotenv
 import sqlite3
 import functools
@@ -55,6 +56,12 @@ async def on_command_error(ctx, error):
             await ctx.send('This command is on cooldown')
         else:
             await ctx.send('An error has occured' + str(error))
+
+@bot.event
+async def on_ready():
+    await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name='movies with the boys'), status=discord.Status.idle)
+            
+            
 @bot.command(
     name='addmovie',
     aliases = ['add', 'addmov'],
