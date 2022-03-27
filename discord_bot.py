@@ -31,7 +31,7 @@ load_dotenv()
 # assign token to variable
 TOKEN = os.getenv('DISCORD_TOKEN')
 # you can change what channels the bot is allowed in here
-allowed_channel = 'movie-suggestions'
+allowed_channel = ['movie-suggestions']
 # setting help command in bot help menu
 help_command = commands.DefaultHelpCommand(no_category='Commands')
 # initialize bot object
@@ -58,7 +58,7 @@ async def add_movie(ctx, *args):
     #check if movie exists
     if (movie != "") and (movie != None):
          # check if correct channel
-        if ctx.channel.name == allowed_channel:
+        if ctx.channel.name in allowed_channel:
         # grab names from db as list
             rows = cursor.execute('SELECT name FROM movies').fetchall()
             # check if db has data
@@ -87,7 +87,7 @@ async def add_movie(ctx, *args):
 async def search_movie(ctx, *args):
     
     movie = ' '.join(args)
-    if ctx.channel.name == allowed_channel:
+    if ctx.channel.name in allowed_channel:
         rows = cursor.execute('SELECT name FROM movies').fetchall()
         if rows:
             rw = functools.reduce(operator.add, rows)
@@ -112,7 +112,7 @@ async def search_movie(ctx, *args):
              alises = ['mov', 'show', 'showmovies'],
              help=': This command will show the current choices for movies')
 async def check_movie_list(ctx):
-    if ctx.channel.name == allowed_channel:
+    if ctx.channel.name in allowed_channel:
         rows = cursor.execute('SELECT name FROM movies').fetchall()
         if rows:
             response = rows
@@ -127,7 +127,7 @@ async def check_movie_list(ctx):
              alises = ['eraseallmovies', 'erasemovies'],
              help=': Only use this if you really need to erase everything')
 async def erase_movies(ctx):
-    if ctx.channel.name == allowed_channel:
+    if ctx.channel.name in allowed_channel:
         # deletes all records
         cursor.execute('DELETE FROM movies WHERE id > 0')
         # commit to db
@@ -144,7 +144,7 @@ async def erase_movies(ctx):
 async def pick_movie(ctx):
     rows = cursor.execute('SELECT name FROM movies').fetchall()
     if rows:
-        if ctx.channel.name == allowed_channel:
+        if ctx.channel.name in allowed_channel:
             response = pick_movie_from_sql()
         else:
             response = "Please post commands in movie-suggestions only."
@@ -157,7 +157,7 @@ async def pick_movie(ctx):
 async def delete_movie(ctx, *args):
     
     movie = ' '.join(args)
-    if ctx.channel.name == allowed_channel:
+    if ctx.channel.name in allowed_channel:
         rows = cursor.execute('SELECT name FROM movies').fetchall()
         print(rows)
         if rows:
