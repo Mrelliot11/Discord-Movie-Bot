@@ -31,7 +31,7 @@ load_dotenv()
 # assign token to variable
 TOKEN = os.getenv('DISCORD_TOKEN')
 # you can change what channels the bot is allowed in here
-allowed_channel = ['movie-suggestions']
+allowed_channel = ['movie-suggestions', 'movie-night-suggestions']
 # setting help command in bot help menu
 help_command = commands.DefaultHelpCommand(no_category='Commands')
 # initialize bot object
@@ -42,9 +42,19 @@ bot = commands.Bot(
 
 @bot.event
 async def on_command_error(ctx, error):
-    if isinstance(error, commands.CommandNotFound):
-        await ctx.send("{}".format(ctx.message.author.mention) + " I don't know that command. Try !help")
-
+    if ctx.channel.name in allowed_channel:
+        if isinstance(error, commands.CommandNotFound):
+            await ctx.send('Command not found')
+        elif isinstance(error, commands.MissingRequiredArgument):
+            await ctx.send('Missing required argument')
+        elif isinstance(error, commands.BadArgument):
+            await ctx.send('Bad argument')
+        elif isinstance(error, commands.CheckFailure):
+            await ctx.send('You do not have permission to use this command')
+        elif isinstance(error, commands.CommandOnCooldown):
+            await ctx.send('This command is on cooldown')
+        else:
+            await ctx.send('An error has occured')
 @bot.command(
     name='addmovie',
     aliases = ['add', 'addmov'],
@@ -83,7 +93,7 @@ async def add_movie(ctx, *args):
         response = "Please enter a movie name e.g. !addmovie The Matrix"
     await ctx.send(response)
     
-@bot.command(name='search', alises= ['searchmov', 'searchmovie', 'check', 'find'], help= ': This command searches for a movie of your choice in the database, if the movie is not in the database it will not search for it. e.g. !search The Matrix')
+@bot.command(name='find', alises= ['searchmov', 'searchmovie', 'check'], help= ': This command searches for a movie of your choice in the database, if the movie is not in the database it will not search for it. e.g. !search The Matrix')
 async def search_movie(ctx, *args):
     
     movie = ' '.join(args)
@@ -99,9 +109,9 @@ async def search_movie(ctx, *args):
             scoreNumber = score[1]
             #if score is greater than 90%, we assume it is a match
             if scoreNumber > 90:
-                response = '{} is in the database'.format(movie)
+                response = '{} is in the database'.format(movie.lower())
             else: #if not, we assume it is not in the db
-                response = '{} is not in the database'.format(movie)    
+                response = '{} is not in the database'.format(movie.lower)    
         else:
             response = "There are no movies in the database."
     else:
@@ -190,7 +200,7 @@ def pick_movie_from_sql():
     # get movie url
     movie_url = ia.get_imdbURL(imdb_movie)
     # print movie url
-    response = 'The movie of the night is {}'.format(movie_url)
+    response = 'The movie of the night is {}'.format(mc) + "\n" + movie_url
     return response
 
 def delete_movie_sql(movie): 
