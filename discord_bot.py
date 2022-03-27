@@ -100,7 +100,9 @@ async def add_movie(ctx, *args):
         response = "Please enter a movie name e.g. !addmovie The Matrix"
     await ctx.send(response)
     
-@bot.command(name='find', alises= ['searchmov', 'searchmovie', 'check'], help= ': This command searches for a movie of your choice in the database, if the movie is not in the database it will not search for it. e.g. !search The Matrix')
+@bot.command(name='find',
+             aliases= ['searchmov', 'searchmovie', 'check', 'search'],
+             help= ': This command searches for a movie of your choice in the database e.g. !search The Matrix')
 async def search_movie(ctx, *args):
     
     movie = ' '.join(args)
@@ -116,7 +118,7 @@ async def search_movie(ctx, *args):
             scoreNumber = score[1]
             #if score is greater than 90%, we assume it is a match
             if scoreNumber > 90:
-                response = '{} is in the database'.format(movie.lower())
+                response = '{} is in the database'.format(movie.lower()) + '\n' + getMovieURL(movie.lower())
             else: #if not, we assume it is not in the db
                 response = '{} is not in the database'.format(movie.lower())    
         else:
@@ -202,16 +204,16 @@ def pick_movie_from_sql():
     # reduce id tuple to int
     st = functools.reduce(operator.add, random_choice)
     # select name from int id
-    movie_choice = cursor.execute('SELECT name FROM movies WHERE id = ' +
-                                  str(st)).fetchone()
+    movie_choice = cursor.execute('SELECT name FROM movies WHERE id = ' + str(st)).fetchone()
     mc = functools.reduce(operator.add, movie_choice)
-    # get movie name and reduce to string, then pass through imdb id search
-    imdb_movie = ia.search_movie(mc)[0]
-    # get movie url
-    movie_url = ia.get_imdbURL(imdb_movie)
     # print movie url
-    response = 'The movie of the night is {}'.format(mc) + "\n" + movie_url
+    response = 'The movie of the night is {}'.format(mc) + "\n" + getMovieURL(mc)
     return response
+
+def getMovieURL(movie):
+    imdb_movie = ia.search_movie(movie)[0]
+    movie_url = ia.get_imdbURL(imdb_movie)
+    return movie_url
 
 def delete_movie_sql(movie): 
     cursor.execute('DELETE FROM movies WHERE name = ?', (movie,))
