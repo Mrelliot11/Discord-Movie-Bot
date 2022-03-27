@@ -27,14 +27,14 @@ Discord Tokens can be acquired from the [Developer Portal](https://discord.com/d
 
 # COMMANDS
 
-- !addmovie: adds your movie choice to the database if not already present.
+- $addmovie: adds your movie choice to the database if not already present.
 
-- !pick: chooses a movie at random and gives IMDB listing
+- $pick: chooses a movie at random and gives IMDB listing
 
-- !movies: shows all the movies put into the db so far
+- $movies: shows all the movies put into the db so far
 
-- !eraseall: deletes all the movies in the .db file
+- $eraseall: deletes all the movies in the .db file
 
-- !search: searches the list of entered movies for the entered movie
+- $search: searches the list of entered movies for the entered movie
 
-- !delete: deletes the entered movie
+- $delete: deletes the entered movie
