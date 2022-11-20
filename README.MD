@@ -17,7 +17,7 @@ A .env file containing discord bot credentials will also need to be used with fo
 
 Discord Tokens can be acquired from the [Developer Portal](https://discord.com/developers)
 
-A movies.db file will also need to be created in the same file as the .py file.
+A movies.db file will also need to be created in the same folder as the .py file.
 
 ## Quickstart:
 
